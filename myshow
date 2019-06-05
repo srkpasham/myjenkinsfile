@@ -6,5 +6,44 @@ pipeline {
                         echo ( 'hello bhavana') 
                         }
                        }
-}
-}
+                stage ( 'stage 2') {
+                     steps { 
+                            input ( 'do you want to proceed') 
+                           }
+                        }
+                 stage ('stage 3'){
+                             when {
+                                   not {
+                                          branch 'master'
+                                      }
+                                    }
+                                        
+                          steps {
+                                  echo 'Hello bhavana'
+                                  }
+                              }
+                   stage ( 'stage 4' ) {
+                          parallel {
+                              stage (' unit test') {
+                                   steps {
+                                        echo (' Running Unit Test') 
+                                        }
+                                    }
+                               stage (' Integration Test'){
+                                      agent {
+                                        docker {
+                                                reuseNode false
+                                                image 'ubuntu'
+                                                }
+                                              }
+                                       steps {
+                                            echo ('Running the integration test')
+                                            }
+                                          }
+                                     
+                                  
+                          }
+                      }
+                    }
+                  }  
+
